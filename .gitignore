@@ -1,0 +1,38 @@
+# Swap files
+*.swp
+*.swo
+
+# Undo files
+*.un~
+
+# Backup files
+*.bak
+*.tmp
+*.temp
+
+# Session files
+session.*
+
+# Plugin files (packer.nvim or lazy.nvim installs)
+site/**
+pack/**
+
+# Log files
+.log
+health_report.log
+health-report.json
+
+# Lua cache files
+*.luac
+
+# Debug output or profiling files
+nvim.log
+profile_output*
+
+# Node modules (if you're using any Node-based plugins)
+node_modules/
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
+
