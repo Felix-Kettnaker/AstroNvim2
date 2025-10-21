@@ -85,6 +85,7 @@ return {
         -- mac shortcuts
         ["<D-c>"] = { '"+y', desc = "Copy to clipboard" },
         ["<D-x>"] = { '"+d', desc = "Cut to clipboard" },
+        ["<D-v>"] = { desc = "Paste from clipboard", function() vim.cmd 'normal! "+p' end },
 
         -- yank without moving cursor
         ["y"] = {
