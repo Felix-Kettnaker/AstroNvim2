@@ -4,6 +4,9 @@ return {
   "AstroNvim/astrocore",
   ---@type AstroCoreOpts
   opts = {
+    _map_sections = {
+      ["<c-s>"] = { desc = require("astroui").get_icon("Session", 1, true) .. "Session" },
+    },
     mappings = {
 
       -- ====== NORMAL ====== --
