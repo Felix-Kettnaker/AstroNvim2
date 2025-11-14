@@ -15,6 +15,9 @@ return {
   { import = "astrocommunity.pack.typescript" },
   { import = "astrocommunity.pack.godot" },
 
+  -- visual
+  { import = "astrocommunity.colorscheme.catppuccin" },
+
   -- functional
   { import = "astrocommunity.motion.nvim-surround" },
 }
