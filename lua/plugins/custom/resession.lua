@@ -31,6 +31,8 @@ return {
         maps.n["<C-s>f"] = { function() require("resession").load() end, desc = "Load a session" }
         maps.n["<C-s>F"] =
           { function() require("resession").load(nil, { dir = "dirsession" }) end, desc = "Load a dirsession" }
+        maps.n["<C-s><C-f>"] =
+          { function() require("resession").load(nil, { dir = "dirsession" }) end, desc = "Load a dirsession" }
         maps.n["<C-s>."] = {
           function() require("resession").load(vim.fn.getcwd(), { dir = "dirsession" }) end,
           desc = "Load current dirsession",
