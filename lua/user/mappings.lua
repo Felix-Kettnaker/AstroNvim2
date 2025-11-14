@@ -75,6 +75,20 @@ return {
           end,
           desc = "Close buffer from tabline",
         },
+
+        -- "Language" mappings
+        ["<Leader>lt"] = {
+          function()
+            vim.ui.input({ prompt = "New Filetype:" }, function(input)
+              if not input or input == "" then
+                vim.notify("Filetype was not set.", vim.log.levels.WARN)
+                return
+              end
+              vim.cmd("set filetype=" .. input)
+            end)
+          end,
+          desc = "Set filetype of buffer",
+        },
       },
 
       -- ====== INSERT ====== --
@@ -102,6 +116,17 @@ return {
         -- move lines in visual line mode
         ["<M-k>"] = { "dkP=']V']", desc = "Move lines up reindented" },
         ["<M-j>"] = { "dp=']V']", desc = "Move lines down reindented" },
+      },
+
+      -- ====== TERMINAL ====== --
+      t = {
+        ["<D-b>"] = {
+          desc = "Toggle bottom terminal",
+          function() vim.cmd("ToggleTerm " .. vim.v.count .. " size=10 direction=horizontal") end,
+        },
+        ["<C-w>"] = { "<C-\\><C-n><C-w>", desc = "Window (from terminal)" },
+        ["<D-Esc>"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
+        ["<D-v>"] = { '<C-\\><C-n>"+pi', desc = "Paste from clipboard" },
       },
     },
   },
