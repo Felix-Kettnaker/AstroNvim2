@@ -34,6 +34,8 @@ return {
           desc = "Close tab",
         },
 
+        ["<F2>"] = { function() vim.lsp.buf.rename() end, desc = "Rename current symbol" },
+
         -- swap jump repeat (, & ;)
         [";"] = { ",", desc = "Repeat Jump backward" },
         [","] = { ";", desc = "Repeat Jump forward" },
