@@ -45,8 +45,8 @@ return {
         ["<M-Down>"] = { function() vim.cmd "normal! ddp==" end, desc = "Move line down reindented" },
 
         -- indent lines
-        ["<Tab>"] = { ">>", desc = "Indent line" },
         ["<C-i>"] = { "<C-i>", desc = "Jump to next location" }, -- Tab is identical to <C-i> by default
+        ["<Tab>"] = { ">>", desc = "Indent line" },
         ["<S-Tab>"] = { "<<", desc = "dedentline" },
 
         ["gV"] = { "v$h", desc = "Visual nutil EOL" },
