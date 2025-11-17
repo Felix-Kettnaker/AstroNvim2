@@ -18,6 +18,7 @@ return {
     end,
   },
   { "wellle/targets.vim" },
+  { "vim-utils/vim-troll-stopper" }, -- marks "troll" characters
   { "habamax/vim-godot" },
   {
     "zef/vim-cycle",
