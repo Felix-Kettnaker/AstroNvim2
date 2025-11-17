@@ -53,9 +53,9 @@ return {
 
         --- Plugin mappings ---
         -- picker
-        ["<D-f>"] = { desc = "Find in buffer", function() Snacks.picker.lines() end },
-        ["<D-F>"] = { desc = "Find in files", function() Snacks.picker.grep() end },
-        ["<D-p>"] = { desc = "Find file", function() Snacks.picker.files() end },
+        ["<D-f>"] = { desc = "Find in buffer", function() require("snacks").picker.lines() end },
+        ["<D-F>"] = { desc = "Find in files", function() require("snacks").picker.grep() end },
+        ["<D-p>"] = { desc = "Find file", function() require("snacks").picker.files() end },
 
         -- ToggleTerm
         ["<D-b>"] = {
