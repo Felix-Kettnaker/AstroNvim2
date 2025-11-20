@@ -44,8 +44,19 @@ return {
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = false, -- sets vim.opt.wrap
         scrolloff = 12,
-        clipboard = "",
+        clipboard = "", -- nicht standardmäßig in + register schreiben
         gdefault = true,
+        shell = "/opt/homebrew/bin/bash",
+
+        list = true,
+        listchars = {
+          space = "⋅",
+          tab = "» ",
+          trail = "•",
+          extends = "❯",
+          precedes = "❮",
+          nbsp = "␣",
+        },
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
