@@ -1,3 +1,41 @@
+local shared = {
+  ["<D-w>"] = {
+    function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      if vim.fn.bufexists(0) == 1 then
+        vim.cmd "b#"
+      else
+        vim.cmd "bp"
+      end
+      vim.api.nvim_buf_delete(bufnr, { force = false })
+    end,
+    desc = "Close tab",
+  },
+  ["<D-s>"] = {
+    desc = "Save file",
+    function()
+      vim.api.nvim_input "<Esc>"
+      vim.cmd "w"
+    end,
+  },
+  ["<F2>"] = { function() vim.lsp.buf.rename() end, desc = "Rename current symbol" },
+
+  ["<C-Tab>"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
+  ["<S-C-Tab>"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+
+  -- ToggleTerm
+  ["<D-b>"] = {
+    desc = "Toggle bottom terminal",
+    function() vim.cmd("ToggleTerm " .. vim.v.count .. " size=10 direction=horizontal") end,
+  },
+
+  -- deletion in insert mode
+  ["<D-Backspace>"] = { "<Cmd>norm! d0<CR>", desc = "Delete to start of line" },
+  ["<D-Delete>"] = { "<Cmd>norm! ld$<CR>", desc = "Delete to end of line" },
+  ["<M-Backspace>"] = { "<Cmd>norm! db<CR>", desc = "Delete word backwards" },
+  ["<M-Delete>"] = { "<Cmd>norm! dw<CR>", desc = "Delete word forwards" },
+}
+
 ---@diagnostic disable: undefined-global
 ---@type LazySpec
 return {
@@ -14,27 +52,10 @@ return {
         -- Mac shortcuts
         ["<D-a>"] = { function() vim.cmd "normal! ggVG" end, desc = "Select all" },
         ["<D-v>"] = { desc = "Paste from clipboard", function() vim.cmd 'normal! "+p' end },
-        ["<D-s>"] = {
-          desc = "Save file",
-          function()
-            vim.api.nvim_input "<Esc>"
-            vim.cmd "w"
-          end,
-        },
-        ["<D-w>"] = {
-          function()
-            local bufnr = vim.api.nvim_get_current_buf()
-            if vim.fn.bufexists(0) == 1 then
-              vim.cmd "b#"
-            else
-              vim.cmd "bp"
-            end
-            vim.api.nvim_buf_delete(bufnr, { force = false })
-          end,
-          desc = "Close tab",
-        },
+        ["<D-s>"] = shared["<D-s>"],
+        ["<D-w>"] = shared["<D-w>"],
 
-        ["<F2>"] = { function() vim.lsp.buf.rename() end, desc = "Rename current symbol" },
+        ["<F2>"] = shared["<F2>"],
 
         -- swap jump repeat (, & ;)
         [";"] = { ",", desc = "Repeat Jump backward" },
@@ -59,15 +80,12 @@ return {
         ["<D-p>"] = { desc = "Find file", function() require("snacks").picker.files() end },
 
         -- ToggleTerm
-        ["<D-b>"] = {
-          desc = "Toggle bottom terminal",
-          function() vim.cmd("ToggleTerm " .. vim.v.count .. " size=10 direction=horizontal") end,
-        },
+        ["<D-b>"] = shared["<D-b>"],
 
         --- misc ---
         -- navigate buffer tabs
-        ["<C-Tab>"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["<S-C-Tab>"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        ["<C-Tab>"] = shared["<C-Tab>"],
+        ["<S-C-Tab>"] = shared["<S-C-Tab>"],
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
@@ -98,6 +116,19 @@ return {
       i = {
         ["<D-v>"] = { desc = "Paste from clipboard", "<C-r>+" },
         ["<S-Tab>"] = { "<Cmd>norm! <<<CR>", desc = "dedentline" },
+        ["<D-s>"] = shared["<D-s>"],
+        ["<D-w>"] = shared["<D-w>"],
+        ["<F2>"] = shared["<F2>"],
+
+        -- navigate buffer tabs
+        ["<C-Tab>"] = shared["<C-Tab>"],
+        ["<S-C-Tab>"] = shared["<S-C-Tab>"],
+
+        -- deletion in insert mode
+        ["<D-Backspace>"] = shared["<D-Backspace>"],
+        ["<D-Delete>"] = shared["<D-Delete>"],
+        ["<M-Backspace>"] = shared["<M-Backspace>"],
+        ["<M-Delete>"] = shared["<M-Delete>"],
       },
 
       -- ====== VISUAL ====== --
@@ -123,13 +154,16 @@ return {
 
       -- ====== TERMINAL ====== --
       t = {
-        ["<D-b>"] = {
-          desc = "Toggle bottom terminal",
-          function() vim.cmd("ToggleTerm " .. vim.v.count .. " size=10 direction=horizontal") end,
-        },
+        ["<D-b>"] = shared["<D-b>"],
         ["<C-w>"] = { "<C-\\><C-n><C-w>", desc = "Window (from terminal)" },
         ["<D-Esc>"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
         ["<D-v>"] = { '<C-\\><C-n>"+pi', desc = "Paste from clipboard" },
+
+        -- deletion in insert mode
+        ["<D-Backspace>"] = shared["<D-Backspace>"],
+        ["<D-Delete>"] = shared["<D-Delete>"],
+        ["<M-Backspace>"] = shared["<M-Backspace>"],
+        ["<M-Delete>"] = shared["<M-Delete>"],
       },
     },
   },
