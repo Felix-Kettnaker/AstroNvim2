@@ -169,6 +169,22 @@ return {
         ["<M-Backspace>"] = shared["<M-Backspace>"],
         ["<M-Delete>"] = shared["<M-Delete>"],
       },
+
+      -- ====== COMMAND ====== --
+      c = {
+        ["<D-v>"] = { "<C-r>+", desc = "Paste from clipboard" },
+
+        -- navigation asdasd asdd
+        ["<D-Right>"] = { "<C-E>", desc = "Jump to End of Line" },
+        ["<M-Right>"] = { "<S-Right>", desc = "Jump one Word right" },
+        ["<D-Left>"] = { "<C-B>", desc = "Jump to End of Line" },
+        ["<M-Left>"] = { "<S-Left>", desc = "Jump one Word left" },
+        -- deletion
+        ["<D-Backspace>"] = { "<C-u>", desc = "Delete to start of line" },
+        -- ["<D-Delete>"] = shared["<D-Delete>"],
+        ["<M-Backspace>"] = { "<C-w>", desc = "Delete word backwards" },
+        -- ["<M-Delete>"] = shared["<M-Delete>"],
+      },
     },
   },
 }
