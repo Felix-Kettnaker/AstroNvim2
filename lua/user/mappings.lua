@@ -115,10 +115,14 @@ return {
       -- ====== INSERT ====== --
       i = {
         ["<D-v>"] = { desc = "Paste from clipboard", "<C-r>+" },
-        ["<S-Tab>"] = { "<Cmd>norm! <<<CR>", desc = "dedentline" },
         ["<D-s>"] = shared["<D-s>"],
         ["<D-w>"] = shared["<D-w>"],
+
         ["<F2>"] = shared["<F2>"],
+
+        -- change indentation
+        ["<S-Tab>"] = { "<Cmd>norm! <<hh<CR>", desc = "dedent line" },
+        -- ["<Tab>"] = { "<Cmd>norm! >>ll<CR>", desc = "indent line" },
 
         -- navigate buffer tabs
         ["<C-Tab>"] = shared["<C-Tab>"],
