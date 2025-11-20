@@ -152,8 +152,8 @@ return {
         },
 
         -- move lines in visual line mode
-        ["<M-k>"] = { "dkP=']V']", desc = "Move lines up reindented" },
-        ["<M-j>"] = { "dp=']V']", desc = "Move lines down reindented" },
+        ["<M-Up>"] = { "dkP=']V']", desc = "Move lines up reindented" },
+        ["<M-Down>"] = { "dp=']V']", desc = "Move lines down reindented" },
       },
 
       -- ====== TERMINAL ====== --
