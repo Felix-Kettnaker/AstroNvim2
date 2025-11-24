@@ -56,6 +56,13 @@ return {
         ["<D-v>"] = { desc = "Paste from clipboard", function() vim.cmd 'normal! "+p' end },
         ["<D-s>"] = shared["<D-s>"],
         ["<D-w>"] = shared["<D-w>"],
+        ["<Leader><D-s>"] = {
+          desc = "Save file without formatting",
+          function()
+            vim.api.nvim_input "<Esc>"
+            vim.cmd "noautocmd w"
+          end,
+        },
 
         ["<F2>"] = shared["<F2>"],
 
