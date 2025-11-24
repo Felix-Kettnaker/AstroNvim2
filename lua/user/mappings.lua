@@ -1,3 +1,5 @@
+require "user.commands"
+
 local shared = {
   ["<D-w>"] = {
     function()
@@ -72,6 +74,12 @@ return {
         ["=p"] = { "=']", desc = "Reindent pasted text" },
 
         ["gV"] = { "v$h", desc = "Visual nutil EOL" },
+
+
+        --- Custom Commands ---
+        ["<Leader>c"] = { desc = "Execute a custom Command" },
+        ["<Leader>cs"] = { function() vim.cmd 'SplitLineAt " "' end, desc = "Split current line at Spaces" },
+        ["<Leader>cS"] = { function() vim.cmd "SplitLineAt" end, desc = "Split current line at provided delimiter" },
 
         --- Plugin mappings ---
         -- picker
