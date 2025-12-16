@@ -166,6 +166,9 @@ return {
             vim.api.nvim_win_set_cursor(0, cur)
           end,
         },
+        -- search selection
+        ["/"] = { "y/<C-r>0", desc = "Search selection" },
+        ["<D-f>"] = { "y:lua Snacks.picker.lines()<CR><C-r>0", desc = "Search line with selection" },
 
         -- move lines in visual line mode
         ["<M-Up>"] = { "dkP=']V']", desc = "Move lines up reindented" },
