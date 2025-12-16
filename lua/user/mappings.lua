@@ -126,6 +126,10 @@ return {
           end,
           desc = "Set filetype of buffer",
         },
+        ["<Leader>lu"] = {
+          function() require("snacks").picker.lsp_references { auto_confirm = false } end,
+          desc = "search Usages",
+        },
       },
 
       -- ====== INSERT ====== --
