@@ -140,6 +140,9 @@ return {
 
         ["<F2>"] = shared["<F2>"],
 
+        -- ToggleTerm
+        ["<D-b>"] = shared["<D-b>"],
+
         -- change indentation
         ["<S-Tab>"] = { "<Cmd>norm! <<hh<CR>", desc = "dedent line" },
         -- ["<Tab>"] = { "<Cmd>norm! >>ll<CR>", desc = "indent line" },
