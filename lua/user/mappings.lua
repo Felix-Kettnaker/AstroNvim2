@@ -66,10 +66,6 @@ return {
 
         ["<F2>"] = shared["<F2>"],
 
-        -- swap jump repeat (, & ;)
-        [";"] = { ",", desc = "Repeat Jump backward" },
-        [","] = { ";", desc = "Repeat Jump forward" },
-
         -- move lines
         ["<M-Up>"] = { function() vim.cmd "normal! ddkP==" end, desc = "Move line up reindented" },
         ["<M-Down>"] = { function() vim.cmd "normal! ddp==" end, desc = "Move line down reindented" },
@@ -82,6 +78,10 @@ return {
 
         ["gV"] = { "v$h", desc = "Visual nutil EOL" },
 
+        --- Overridden vim cpmmands ---
+        -- swap jump repeat (, & ;)
+        [";"] = { ",", desc = "Repeat Jump backward" },
+        [","] = { ";", desc = "Repeat Jump forward" },
 
         --- Custom Commands ---
         ["<Leader>c"] = { desc = "Execute a custom Command" },
@@ -113,7 +113,7 @@ return {
           desc = "Close buffer from tabline",
         },
 
-        -- "Language" mappings
+        -- LSP mappings
         ["<Leader>lt"] = {
           function()
             vim.ui.input({ prompt = "New Filetype:" }, function(input)
