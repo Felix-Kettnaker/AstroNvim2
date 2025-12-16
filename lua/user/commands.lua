@@ -1,3 +1,4 @@
+-- Split line at delimiter
 vim.api.nvim_create_user_command("SplitLineAt", function(opts)
   local function splitLineAt(delimiter)
     -- strip quotes
@@ -54,6 +55,87 @@ vim.api.nvim_create_user_command("SplitLineAt", function(opts)
   else
     splitLineAt(opts.args)
   end
+end, {})
+
+--
+-- NPM Scripts Picker
+--
+vim.api.nvim_create_user_command("PickNpmScript", function(_opts)
+  local path = vim.fn.findfile("package.json", ".;")
+  if path == "" then return vim.notify("No package.json found", vim.log.levels.WARN) end
+
+  -- 1. Decode JSON to get the commands safely
+  local content = table.concat(vim.fn.readfile(path), "\n")
+  local ok, json = pcall(vim.fn.json_decode, content)
+  if not ok or not json.scripts then return vim.notify("No scripts found in package.json", vim.log.levels.WARN) end
+
+  -- 2. Scan file manually to get keys in definition order
+  -- (Lua tables are unordered, so pairs(json.scripts) destroys file order)
+  local script_keys = {}
+  local in_scripts = false
+  local line_num = 0
+  for line in io.lines(path) do
+    line_num = line_num + 1
+    if not in_scripts then
+      -- Look for "scripts": {
+      if line:match '^%s*"scripts"%s*:%s*{' then in_scripts = true end
+    else
+      -- Stop if we hit the closing brace of scripts
+      if line:match "^%s*}" then break end
+
+      -- Extract key from line: "start": "..."
+      local key = line:match '^%s*"(.-)"%s*:'
+      if key and json.scripts[key] then table.insert(script_keys, { name = key, line = line_num }) end
+    end
+  end
+
+  -- Fallback: If regex failed (e.g. minified JSON), use random pairs order
+  local do_file_preview = #script_keys > 0
+  if not do_file_preview then
+    for k, _ in pairs(json.scripts) do
+      table.insert(script_keys, k)
+    end
+    table.sort(script_keys) -- At least sort A-Z if we can't get file order
+  end
+
+  -- 3. Build items list based on the ordered keys
+  local items = {}
+  for _, key in ipairs(script_keys) do
+    local cmd_name = key.name or key
+    table.insert(items, {
+      text = cmd_name,
+      file = path,
+      pos = do_file_preview and { key.line, 1 } or nil,
+      preview = do_file_preview and nil or {
+        text = json.scripts[cmd_name],
+        ft = "sh", -- syntax highlighting
+      },
+    })
+  end
+
+  -- 4. Open Picker
+  require("snacks").picker {
+    title = "NPM Scripts",
+    items = items,
+    -- enable line wrap in preview window
+    on_show = function(picker) picker.preview.win.opts.wo.wrap = true end,
+    preview = do_file_preview and "file" or "preview",
+    format = function(item, _)
+      return {
+        { item.text, "SnacksPickerLabel" },
+        { " " },
+        { item.cmd, "Comment" },
+      }
+    end,
+    confirm = function(picker, item)
+      picker:close()
+      -- Determine new terminal ID
+      local terminals = require("toggleterm.terminal").get_all()
+      local new_id = (#terminals > 0) and (terminals[#terminals].id + 1) or 1
+      -- Run in ToggleTerm
+      vim.cmd(new_id .. "TermExec cmd='npm run " .. item.text .. "' size=10 direction=horizontal")
+    end,
+  }
 end, {})
 
 return {}

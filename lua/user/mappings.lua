@@ -93,6 +93,7 @@ return {
         ["<D-f>"] = { desc = "Find in buffer", function() require("snacks").picker.lines() end },
         ["<D-F>"] = { desc = "Find in files", function() require("snacks").picker.grep() end },
         ["<D-p>"] = { desc = "Find file", function() require("snacks").picker.files() end },
+        ["<Leader>fs"] = { desc = "NPM Script", function() vim.cmd "PickNpmScript" end },
 
         -- ToggleTerm
         ["<D-b>"] = shared["<D-b>"],
