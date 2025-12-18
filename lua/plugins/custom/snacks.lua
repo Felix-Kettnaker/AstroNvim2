@@ -13,6 +13,8 @@ return {
         local maps = opts.mappings
         local snack_opts = require("astrocore").plugin_opts "snacks.nvim"
 
+        maps.n["<Leader>fl"] = nil
+        maps.n["<Leader>ff"] = nil
         maps.n["<Leader>ft"] = nil
         maps.n["<Leader>f<C-t>"] = { function() require("snacks").picker.colorschemes() end, desc = "Find themes" }
       end,
