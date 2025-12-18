@@ -82,6 +82,7 @@ return {
         -- swap jump repeat (, & ;)
         [";"] = { ",", desc = "Repeat Jump backward" },
         [","] = { ";", desc = "Repeat Jump forward" },
+        ["Vat"] = { "VatV", desc = "Visual line around tag" },
 
         --- Custom Commands ---
         ["<Leader>c"] = { desc = "Execute a custom Command" },
