@@ -93,7 +93,9 @@ return {
         ["<D-f>"] = { desc = "Find in buffer", function() require("snacks").picker.lines() end },
         ["<D-F>"] = { desc = "Find in files", function() require("snacks").picker.grep() end },
         ["<D-p>"] = { desc = "Find file", function() require("snacks").picker.files() end },
+        ["<Leader>fj"] = { desc = "Find Jumps", function() require("snacks").picker.jumps() end },
         ["<Leader>fs"] = { desc = "NPM Script", function() vim.cmd "PickNpmScript" end },
+        ["<Leader>ft"] = { desc = "Find Terminals", function() vim.cmd "PickTerminal" end },
 
         -- ToggleTerm
         ["<D-b>"] = shared["<D-b>"],

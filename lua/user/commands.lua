@@ -138,4 +138,68 @@ vim.api.nvim_create_user_command("PickNpmScript", function(_opts)
   }
 end, {})
 
+--
+-- Toggleterm Picker
+--
+vim.api.nvim_create_user_command("PickTerminal", function(opts)
+  local terminals = require("toggleterm.terminal").get_all(opts.bang)
+  if #terminals == 0 then return require("toggleterm.utils").notify("No toggleterms are open yet", "info") end
+
+  local items = {}
+
+  for _, term in ipairs(terminals) do
+    local lines = ""
+    local command = term.cmd or ""
+    if vim.api.nvim_buf_is_valid(term.bufnr) then
+      -- Get all lines (0 to -1)
+      local lines_map = vim.api.nvim_buf_get_lines(term.bufnr, 0, -1, false)
+      lines = table.concat(lines_map, "\n")
+      -- if 2. line starts with $, command is in 1. line, else in 2. line
+      if lines_map[2]:match "^%s*%$" then
+        command = lines_map[1]
+      else
+        command = lines_map[2]
+      end
+    end
+    table.insert(items, {
+      title = "Terminals",
+      -- text = string.format("%d [%s]: %s", term.id, term:_display_name(), command),
+      t_id = term.id,
+      t_name = string.format(" [%s]: ", term:_display_name()),
+      t_command = command,
+      term = term,
+      -- last line
+      pos = { vim.api.nvim_buf_line_count(term.bufnr), 1 },
+      preview = {
+        text = lines,
+      },
+    })
+  end
+
+  require("snacks").picker.pick {
+    title = "Select Terminal",
+    items = items,
+    -- format = "text",
+    format = function(item, _)
+      return {
+        { tostring(item.t_id), "SnacksPickerLabel" },
+        { item.t_name, "Comment" },
+        { item.t_command, "sh" },
+      }
+    end,
+    preview = "preview",
+    confirm = function(picker, item)
+      picker:close()
+      if item then
+        local term = item.term
+        if term:is_open() then
+          term:focus()
+        else
+          term:open()
+        end
+      end
+    end,
+  }
+end, {})
+
 return {}
