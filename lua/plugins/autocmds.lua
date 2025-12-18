@@ -7,7 +7,7 @@ return {
 
       prevent_comment_extension = {
         {
-          event = { "BufEnter" },
+          event = { "BufRead", "BufEnter" },
           desc = "prevents adding the comment prefix when pressing o on a commented line, enter works though",
           callback = function() vim.opt.formatoptions:remove { "o" } end,
         },
