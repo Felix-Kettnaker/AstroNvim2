@@ -25,10 +25,10 @@ return {
     init = function()
       vim.g.cycle_override_defaults = {
         { "global", { "true", "false" } },
-        { "global", { "<", ">" } },
+        { "global", { "<", ">=" } },
+        { "global", { ">", "<=" } },
         { "global", { "==", "!=" } },
         { "global", { "===", "!==" } },
-        { "global", { "<=", ">=" } },
         { "global", { "-=", "+=" } },
         { "global", { "&&", "||" } },
       }
