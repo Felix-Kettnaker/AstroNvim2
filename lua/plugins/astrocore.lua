@@ -47,6 +47,7 @@ return {
         clipboard = "", -- nicht standardmäßig in + register schreiben
         gdefault = true,
         shell = "/opt/homebrew/bin/bash",
+        colorcolumn = "80,100",
 
         list = true,
         listchars = {

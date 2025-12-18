@@ -18,6 +18,7 @@ return {
       ["catppuccin-mocha"] = {
         -- Comment = { fg = "#8585a4", bg = "#27273b" },
         CopilotSuggestion = { fg = "#abb9b2" },
+        ColorColumn = { bg = "#252535" },
       },
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme
         -- Normal = { bg = "#000000" },
