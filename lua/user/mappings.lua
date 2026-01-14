@@ -172,7 +172,13 @@ return {
         ["y"] = {
           function()
             local cur = vim.api.nvim_win_get_cursor(0)
-            vim.cmd "normal! y"
+            -- Yank to the specified register if a register is given
+            local reg = vim.v.register
+            if reg and reg ~= '"' then
+              vim.cmd('normal! "' .. reg .. "y")
+            else
+              vim.cmd "normal! y"
+            end
             vim.api.nvim_win_set_cursor(0, cur)
           end,
         },
