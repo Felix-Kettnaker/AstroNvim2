@@ -13,12 +13,18 @@ return {
         },
       },
 
-      set_filetypes = {
-        {
+      init_by_filetype = {
+        { -- set filetype
           event = { "BufRead", "BufNewFile" },
           desc = "sets the filetype of all .env* files to sh",
           pattern = ".env*",
           command = "set filetype=sh",
+        },
+        { -- set wrap
+          event = { "BufRead", "BufNewFile" },
+          desc = "enable line wrap for markdown and text files",
+          pattern = { "*.md", "*.txt", "*.markdown" },
+          command = "setlocal wrap",
         },
       },
     },
