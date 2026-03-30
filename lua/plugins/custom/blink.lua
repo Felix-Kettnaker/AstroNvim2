@@ -7,8 +7,8 @@ local keymap = {
   ["<C-b>"] = { function(cmp) cmp.select_prev { auto_insert = false, count = 5 } end },
   ["<Down>"] = { function(cmp) return cmp.select_next { auto_insert = false } end, "fallback" },
   ["<Up>"] = { function(cmp) return cmp.select_prev { auto_insert = false } end, "fallback" },
-  ["<Left>"] = { "cancel", "fallback" },
-  ["<Right>"] = { "cancel", "fallback" },
+  ["<Left>"] = { function(cmp) cmp.hide() end, "fallback" },
+  ["<Right>"] = { function(cmp) cmp.hide() end, "fallback" },
 }
 return {
   {
