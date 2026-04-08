@@ -1,15 +1,45 @@
 return {
   {
     "kylechui/nvim-surround",
-    opts = {
-      keymaps = {
-        normal = "<Leader>s",
-        normal_cur = "<Leader>sl", -- surround current line
-        normal_line = "<Leader>S", -- surround on new lines (above+bellow)
-        normal_cur_line = "<Leader>Sl",
-        visual = "<Leader>s",
-        visual_line = "<Leader>S",
+    keys = {
+      {
+        "<Leader>s",
+        "<Plug>(nvim-surround-normal)",
+        mode = "n",
+        desc = "Add a surrounding pair around a motion",
       },
+      {
+        "<Leader>sl",
+        "<Plug>(nvim-surround-normal-cur)",
+        mode = "n",
+        desc = "Add a surrounding pair around the current line",
+      },
+      {
+        "<Leader>S",
+        "<Plug>(nvim-surround-normal-line)",
+        mode = "n",
+        desc = "Add a surrounding pair around a motion, on new lines",
+      },
+      {
+        "<Leader>Sl",
+        "<Plug>(nvim-surround-normal-cur-line)",
+        mode = "n",
+        desc = "Add a surrounding pair around the current line, on new lines",
+      },
+      {
+        "<Leader>s",
+        "<Plug>(nvim-surround-normal-visual)",
+        mode = "x",
+        desc = "Add a surrounding pair around a visual selection",
+      },
+      {
+        "<Leader>S",
+        "<Plug>(nvim-surround-normal-visual-line)",
+        mode = "x",
+        desc = "Add a surrounding pair around a visual selection, on new lines",
+      },
+    },
+    opts = {
       surrounds = {
         ["/"] = {
           add = { " /* ", " */ " },
