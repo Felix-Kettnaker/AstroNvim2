@@ -21,6 +21,15 @@ local shared = {
     end,
   },
   ["<F2>"] = { function() vim.lsp.buf.rename() end, desc = "Rename current symbol" },
+  -- ["<F2>"] = {
+  --   function()
+  --     local curr_word = vim.fn.expand "<cword>"
+  --     vim.ui.input({ prompt = "Rename '" .. curr_word .. "' to: " }, function(input)
+  --       if input and #input > 0 then vim.lsp.buf.rename(input) end
+  --     end)
+  --   end,
+  --   desc = "Rename current symbol",
+  -- },
 
   ["<C-Tab>"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
   ["<S-C-Tab>"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
@@ -84,6 +93,8 @@ return {
         [","] = { ";", desc = "Repeat Jump forward" },
         ["Vat"] = { "VatV", desc = "Visual line around tag" },
 
+        ["gp"] = { "`[v`]", desc = "Visual select last paste" },
+
         --- Custom Commands ---
         ["<Leader>c"] = { desc = "Execute a custom Command" },
         ["<Leader>cs"] = { function() vim.cmd 'SplitLineAt " "' end, desc = "Split current line at Spaces" },
@@ -95,7 +106,7 @@ return {
         ["<D-F>"] = { desc = "Find in files", function() require("snacks").picker.grep() end },
         ["<D-p>"] = { desc = "Find file", function() require("snacks").picker.files() end },
         ["<Leader>fj"] = { desc = "Find Jumps", function() require("snacks").picker.jumps() end },
-        ["<Leader>fs"] = { desc = "NPM Script", function() vim.cmd "PickNpmScript" end },
+        ["<Leader>fS"] = { desc = "Find NPM Scripts", function() vim.cmd "PickNpmScript" end },
         ["<Leader>ft"] = { desc = "Find Terminals", function() vim.cmd "PickTerminal" end },
 
         -- ToggleTerm
