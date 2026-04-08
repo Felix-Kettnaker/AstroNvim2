@@ -12,7 +12,7 @@ local keymap = {
 }
 return {
   {
-    "Saghen/blink.cmp",
+    "saghen/blink.cmp",
     opts = {
       keymap = keymap,
       cmdline = {
