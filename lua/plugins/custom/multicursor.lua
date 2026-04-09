@@ -46,7 +46,7 @@ return {
         desc = "Finish cursor drag",
       },
       {
-        "<D-k>",
+        "<M-k>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -57,7 +57,7 @@ return {
         desc = "󰞙 Add Cursor above",
       },
       {
-        "<D-j>",
+        "<M-j>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -68,7 +68,7 @@ return {
         desc = "󰞖 Add Cursor below",
       },
       {
-        "<D-M-k>",
+        "<M-K>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -79,7 +79,7 @@ return {
         desc = " Skip Cursor above",
       },
       {
-        "<D-M-j>",
+        "<M-J>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -90,7 +90,7 @@ return {
         desc = " Skip Cursor below",
       },
       {
-        "<D-n>",
+        "~",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -101,7 +101,7 @@ return {
         desc = "󰞘 Add Cursor next match",
       },
       {
-        "<D-N>",
+        "<M-p>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -112,7 +112,7 @@ return {
         desc = "󰞗 Add Cursor prev match",
       },
       {
-        "<D-M-n>",
+        "<M-N>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -123,7 +123,7 @@ return {
         desc = " Skip Cursor next match",
       },
       {
-        "<D-M-N>",
+        "<M-P>",
         function()
           local mc = require "multicursor-nvim"
           for _ = 1, vim.v.count1 do
@@ -134,7 +134,7 @@ return {
         desc = " Skip Cursor prev match",
       },
       {
-        "<D-*>",
+        "<M-*>",
         function() require("multicursor-nvim").matchAllAddCursors() end,
         mode = "n",
         desc = "󰎂 Add Cursor every match",
