@@ -83,6 +83,7 @@ return {
           desc = "Decrease Neovide scale factor",
         },
         ["<C-=>"] = { reset_scale_factor, desc = "Reset Neovide scale factor" },
+        ["<D-k>"] = { "<Cmd>NeovideForceClick<CR>", desc = "MacOS ForceTouch" },
       },
     },
   },
