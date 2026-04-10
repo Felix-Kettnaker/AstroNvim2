@@ -27,6 +27,26 @@ return {
           command = "setlocal wrap",
         },
       },
+
+      update_neovide_title = {
+        {
+          event = { "User", "DirChanged", "VimEnter" },
+          desc = "changes vim.opt.titlestring to display the dirsession",
+          pattern = { "ResessionLoadPost", "*" },
+          callback = function()
+            vim.schedule(function()
+              local session = vim.g.current_session_name or "No Session"
+              local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+              -- Format: [Session] - CWD - Neovide
+              if session == "No Session" then
+                vim.opt.titlestring = "Neovide"
+              else
+                vim.opt.titlestring = string.format("[%s] 🔸 %s", session, cwd)
+              end
+            end)
+          end,
+        },
+      },
     },
   },
 }
