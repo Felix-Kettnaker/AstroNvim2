@@ -60,9 +60,8 @@ return {
         },
       },
       g = { -- vim.g.<key>
-        -- configure global vim variables (vim.g)
-        -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
-        -- This can be found in the `lua/lazy_setup.lua` file
+        terminal_color_4 = "#7575f2",
+        terminal_color_12 = "#a2a2fa",
       },
     },
   },
