@@ -202,4 +202,30 @@ vim.api.nvim_create_user_command("PickTerminal", function(opts)
   }
 end, {})
 
+--
+-- Location Yanker
+--
+vim.api.nvim_create_user_command("YankLocation", function(opts)
+  local path = vim.fn.expand("%:p:.") -- relative path
+
+  local line_info = (opts.line1 == opts.line2)
+    and tostring(opts.line1)
+    or (opts.line1 .. "-" .. opts.line2)
+
+  local location = path .. ":" .. line_info
+
+  local text = table.concat(
+    vim.api.nvim_buf_get_lines(0, opts.line1, opts.line2, false),
+    "\n"
+  )
+
+  vim.fn.setreg("+", text)
+    vim.notify("copied text to clipboard...")
+  vim.defer_fn(function()
+    vim.fn.setreg("+", location)
+    vim.notify("...and location")
+  end, 800)
+end, {range = true})
+
+
 return {}

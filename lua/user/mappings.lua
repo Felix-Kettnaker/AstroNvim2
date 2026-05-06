@@ -99,6 +99,7 @@ return {
         ["<Leader>c"] = { desc = "Execute a custom Command" },
         ["<Leader>cs"] = { function() vim.cmd 'SplitLineAt " "' end, desc = "Split current line at Spaces" },
         ["<Leader>cS"] = { function() vim.cmd "SplitLineAt" end, desc = "Split current line at provided delimiter" },
+        ["<Leader>yl"] = { function() vim.cmd "YankLocation" end, desc = "Yanks the line and its location" },
 
         --- Plugin mappings ---
         -- picker
@@ -200,6 +201,9 @@ return {
         -- move lines in visual line mode
         ["<M-Up>"] = { "dkP=']V']", desc = "Move lines up reindented" },
         ["<M-Down>"] = { "dp=']V']", desc = "Move lines down reindented" },
+
+        -- custom commands
+        ["<Leader>yl"] = { function() vim.cmd "YankLocation" end, desc = "Yanks the selection and its location" },
       },
 
       -- ====== TERMINAL ====== --
