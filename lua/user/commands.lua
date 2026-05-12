@@ -224,7 +224,7 @@ vim.api.nvim_create_user_command("YankLocation", function(opts)
   vim.defer_fn(function()
     vim.fn.setreg("+", location)
     vim.notify("...and location")
-  end, 800)
+  end, 1000)
 end, {range = true})
 
 

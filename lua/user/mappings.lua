@@ -203,7 +203,7 @@ return {
         ["<M-Down>"] = { "dp=']V']", desc = "Move lines down reindented" },
 
         -- custom commands
-        ["<Leader>yl"] = { function() vim.cmd "YankLocation" end, desc = "Yanks the selection and its location" },
+        ["<Leader>yl"] = { "<esc><cmd>'<,'>YankLocation<CR>", desc = "Yanks the selection and its location" },
       },
 
       -- ====== TERMINAL ====== --
