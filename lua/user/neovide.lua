@@ -25,6 +25,7 @@ return {
   opts = {
     options = {
       opt = {
+        guifont = "FiraCode Nerd Font Mono",
         showmatch = true,
         matchtime = 2, -- 0.5 sec
         guicursor = {
