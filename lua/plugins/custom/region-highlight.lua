@@ -7,7 +7,7 @@ return {
   opts = {
     refresh_debounce = 50,
     fold_all = false,
-    -- colors = { "#2a2a3a", "#2a3a2a", "#3a2a2a" },
+    colors = { "#202230", "#212733", "#232c36", "#253238" },
   }, -- endregion
   -- #endregion
   keys = {
