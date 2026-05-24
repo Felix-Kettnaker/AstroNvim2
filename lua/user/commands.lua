@@ -228,4 +228,198 @@ vim.api.nvim_create_user_command("YankLocation", function(opts)
 end, {range = true})
 
 
+--
+-- Sad Project-Wide Search & Replace Picker
+-- Step 1: Snacks grep (per-occurrence list, case-sensitive, <M-r> = regex mode)
+-- Step 2: sad diff picker — same per-occurrence list, delta preview per hunk.
+--
+vim.api.nvim_create_user_command("FindAndReplace", function()
+  require("snacks").picker.grep({
+    title = "Find & Replace",
+    -- Start in exact/literal mode; <M-r> toggles to regex mode.
+    -- regex = false → grep source adds --fixed-strings; is_exact check below stays consistent.
+    regex = false,
+    -- Show "R" icon when regex IS active (value=true), not when it's off.
+    toggles = { regex = { icon = "R", value = true } },
+    -- Override the hardcoded --smart-case in the grep source (last flag wins in rg)
+    args = { "--case-sensitive" },
+    confirm = function(picker, _item)
+      local pattern = picker.input.filter.search
+      -- regex == false (the default) means exact/literal mode; true = regex mode
+      local is_exact = picker.opts.regex == false
+      local match_count = #picker.list.items
+
+      if vim.trim(pattern) == "" then
+        vim.notify("sad: empty pattern", vim.log.levels.WARN)
+        return
+      end
+
+      vim.schedule(function()
+        vim.ui.input({ prompt = "replace with" }, function(replacement)
+          picker:close()
+          if replacement == nil then return end
+
+          local cwd = vim.fn.getcwd()
+          -- sad flags: -f I = force case-sensitive (disable smartcase); -e = exact/literal
+          local sad_flags = "-f I" .. (is_exact and " -e" or "")
+          local rg_flags = "--case-sensitive" .. (is_exact and " --fixed-strings" or "")
+
+          local cmd = "rg -l --null " .. rg_flags .. " "
+            .. vim.fn.shellescape(pattern)
+            .. " | sad --read0 --fzf never --pager never -u 0 " .. sad_flags .. " "
+            .. vim.fn.shellescape(pattern)
+            .. " "
+            .. vim.fn.shellescape(replacement)
+
+          vim.system({ "sh", "-c", cmd }, { text = true, cwd = cwd }, function(obj)
+            local stdout = obj.stdout or ""
+
+            if stdout == "" then
+              vim.schedule(function()
+                local err = (obj.stderr or ""):gsub("%s+$", "")
+                vim.notify(
+                  err ~= "" and ("sad: " .. err) or "sad: no matches found",
+                  err ~= "" and vim.log.levels.ERROR or vim.log.levels.INFO
+                )
+              end)
+              return
+            end
+
+            -- Parse the unified diff into per-file items.
+            -- With -u 0, each changed line is its own @@ hunk, so delta still shows
+            -- them as separate small blocks even when the full file diff is passed.
+            local items = {}
+            local current_path = nil
+            local current_lines = {}
+            local in_file_header = false
+
+            local function save_file()
+              if current_path and #current_lines > 0 then
+                table.insert(items, {
+                  text = current_path,
+                  file = current_path,
+                  _diff = table.concat(current_lines, "\n"),
+                })
+              end
+            end
+
+            for line in (stdout .. "\n"):gmatch("([^\n]*)\n") do
+              if line:match("^diff %-%-git ") then
+                save_file()
+                current_path, current_lines = nil, { line }
+                in_file_header = true
+              elseif in_file_header then
+                table.insert(current_lines, line)
+                if line:match("^--- ") then
+                  local abs = line:match("^--- (.+)")
+                  if abs then current_path = vim.fn.fnamemodify(abs, ":.") end
+                elseif line:match("^%+%+%+ ") then
+                  in_file_header = false
+                end
+              else
+                table.insert(current_lines, line)
+              end
+            end
+            save_file()
+
+            if #items == 0 then
+              vim.schedule(function()
+                vim.notify("sad: no matches found", vim.log.levels.INFO)
+              end)
+              return
+            end
+
+            -- All items are unique files; build list for apply_all.
+            local unique_files = vim.tbl_map(function(it) return it.file end, items)
+
+            local function apply_file(path, cb)
+              local apply_cmd = "printf '%s\\n' "
+                .. vim.fn.shellescape(path)
+                .. " | sad --commit " .. sad_flags .. " "
+                .. vim.fn.shellescape(pattern)
+                .. " "
+                .. vim.fn.shellescape(replacement)
+              vim.system({ "sh", "-c", apply_cmd }, { text = true, cwd = cwd }, function(res)
+                vim.schedule(function()
+                  if res.code ~= 0 then
+                    vim.notify(
+                      "sad error (" .. path .. "): " .. (res.stderr or "unknown"),
+                      vim.log.levels.ERROR
+                    )
+                  else
+                    local abs_path = vim.fn.fnamemodify(path, ":p")
+                    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                      if vim.api.nvim_buf_get_name(buf) == abs_path and vim.api.nvim_buf_is_loaded(buf) then
+                        vim.api.nvim_buf_call(buf, function() vim.cmd("checktime") end)
+                      end
+                    end
+                  end
+                  if cb then cb(res.code == 0) end
+                end)
+              end)
+            end
+
+            vim.schedule(function()
+              require("snacks").picker {
+                -- title = ("replace %s with %s:  %d match%s"):format(
+                title = ("Replace:  %d match%s"):format(
+                  -- pattern, replacement,
+                  match_count, match_count == 1 and "" or "es"
+                ),
+                items = items,
+                -- Mirror the regex state from the grep picker: show R icon iff regex was active.
+                regex = not is_exact,
+                toggles = { regex = { icon = "R", value = true } },
+                -- Full per-file diff piped to delta; -u 0 keeps each hunk as one changed line.
+                preview = function(ctx)
+                  require("snacks.picker.preview").cmd({ "delta" }, ctx, { input = ctx.item._diff })
+                end,
+                format = function(item, _)
+                  return { { item.file, "SnacksPickerFile" } }
+                end,
+                confirm = function(picker2, _item)
+                  local targets = picker2:selected({ fallback = true })
+                  picker2:close()
+                  local n, done = #targets, 0
+                  for _, it in ipairs(targets) do
+                    apply_file(it.file, function(ok)
+                      done = done + 1
+                      if n == 1 then
+                        if ok then vim.notify("sad: applied → " .. it.file) end
+                      elseif done == n then
+                        vim.notify(("sad: applied to %d file%s"):format(n, n == 1 and "" or "s"))
+                      end
+                    end)
+                  end
+                end,
+                win = {
+                  input = {
+                    keys = { ["<C-a>"] = { "apply_all", mode = { "i", "n" } } },
+                  },
+                },
+                actions = {
+                  -- Mode is fixed at this point; disable the toggle to avoid confusion.
+                  toggle_regex = function() end,
+                  apply_all = function(picker2)
+                    picker2:close()
+                    local n, done = #unique_files, 0
+                    for _, path in ipairs(unique_files) do
+                      apply_file(path, function()
+                        done = done + 1
+                        if done == n then
+                          vim.notify(("sad: applied to %d file%s"):format(n, n == 1 and "" or "s"))
+                        end
+                      end)
+                    end
+                  end,
+                },
+              }
+            end)
+          end)
+        end)
+      end)
+    end,
+  })
+end, {})
+
 return {}

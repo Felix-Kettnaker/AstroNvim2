@@ -100,6 +100,7 @@ return {
         ["<Leader>cs"] = { function() vim.cmd 'SplitLineAt " "' end, desc = "Split current line at Spaces" },
         ["<Leader>cS"] = { function() vim.cmd "SplitLineAt" end, desc = "Split current line at provided delimiter" },
         ["<Leader>yl"] = { function() vim.cmd "YankLocation" end, desc = "Yanks the line and its location" },
+        ["<D-R>"] = { function() vim.cmd "FindAndReplace" end, desc = "Find and replace globally"}, 
 
         --- Plugin mappings ---
         -- picker
