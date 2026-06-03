@@ -67,6 +67,7 @@
   "vim-cycle": { "branch": "master", "commit": "57a2a7ca9451f47146a829cc74c1c950a855329e" },
   "vim-godot": { "branch": "master", "commit": "2cecd0c83a7b3f012142a584d53a3a51be246c8e" },
   "vim-highlighter": { "branch": "main", "commit": "48a18eea513f651359457845e20b4c6202f6a84a" },
+  "vim-matchup": { "branch": "master", "commit": "a2d618496223386844acb5a6763cfc3cc1357af1" },
   "vim-repeat": { "branch": "master", "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635" },
   "vim-troll-stopper": { "branch": "master", "commit": "24a9db129cd2e3aa2dcd79742b6cb82a53afef6c" },
   "which-key.nvim": { "branch": "main", "commit": "fcbf4eea17cb299c02557d576f0d568878e354a4" }
