@@ -17,7 +17,22 @@ return {
       ]]
     end,
   },
-  { "wellle/targets.vim" },
+  {
+    "wellle/targets.vim",
+    init = function()
+      -- Neovim 0.12 ships default `in`/`an` treesitter node-select text objects
+      -- (global, x+o modes) that shadow targets.vim's `n`/`l` seek modifier
+      -- (e.g. `dinq` = delete inner next quote). They are set after this `init`
+      -- runs, so drop them at VimEnter instead of here.
+      vim.api.nvim_create_autocmd("VimEnter", {
+        desc = "Unmap default in/an node text objects (conflict with targets.vim)",
+        callback = function()
+          pcall(vim.keymap.del, { "x", "o" }, "in")
+          pcall(vim.keymap.del, { "x", "o" }, "an")
+        end,
+      })
+    end,
+  },
   { "vim-utils/vim-troll-stopper" }, -- marks "troll" characters
   { "habamax/vim-godot" },
   {
