@@ -59,6 +59,13 @@ Lazy spec imports (later overrides earlier). All `plugins/*.lua` and
 | LSP server tweak | `after/lsp/<server>.lua`; installs in `mason.lua` |
 | one-off lua with no home | `polish.lua` |
 
+## Gotchas
+
+- nvim-treesitter sets the `textobjects` query group programmatically, so an
+  `after/queries/<lang>/textobjects.scm` does **not** merge into it. To add
+  captures, use your own group name (file `after/queries/<lang>/<group>.scm`)
+  and pass that group to `select_textobject`.
+
 ## Notable subsystems
 
 - **JSP** (`lua/jsp.lua` + `ftplugin/jsp.lua`): outer html parser, `<% %>`

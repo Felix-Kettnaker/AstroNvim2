@@ -28,6 +28,48 @@ return {
         },
       },
 
+      attribute_textobject = {
+        {
+          event = "FileType",
+          desc = "map aa/ia to the attribute text object in markup files (falls back to argument)",
+          pattern = { "html", "xml", "vue" },
+          callback = function(args)
+            -- AstroNvim binds buffer-local aa/ia to @parameter (argument) via
+            -- nvim-treesitter-textobjects; it does so on FileType too, so defer
+            -- to override it after.
+            vim.schedule(function()
+              if not vim.api.nvim_buf_is_valid(args.buf) then return end
+              local select = require("nvim-treesitter-textobjects.select").select_textobject
+              local shared = require "nvim-treesitter-textobjects.shared"
+              local scfg = require("nvim-treesitter-textobjects.config").select
+              -- attribute object, falling back to the argument object when the
+              -- cursor isn't on/before an attribute (preserves the old aa/ia).
+              local function map(lhs, attr_obj, arg_obj)
+                vim.keymap.set({ "x", "o" }, lhs, function()
+                  local hit = shared.textobject_at_point(
+                    "@attribute.outer",
+                    "attributes",
+                    0,
+                    nil,
+                    { lookahead = scfg.lookahead, lookbehind = scfg.lookbehind }
+                  )
+                  if hit then
+                    select(attr_obj, "attributes")
+                  else
+                    select(arg_obj, "textobjects")
+                  end
+                end, {
+                  buffer = args.buf,
+                  desc = "attribute/argument " .. (lhs == "aa" and "outer" or "inner"),
+                })
+              end
+              map("aa", "@attribute.outer", "@parameter.outer")
+              map("ia", "@attribute.inner", "@parameter.inner")
+            end)
+          end,
+        },
+      },
+
       update_neovide_title = {
         {
           event = { "User", "DirChanged", "VimEnter" },
