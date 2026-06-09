@@ -134,6 +134,7 @@ vim.api.nvim_create_user_command("PickNpmScript", function(_opts)
       local new_id = (#terminals > 0) and (terminals[#terminals].id + 1) or 1
       -- Run in ToggleTerm
       vim.cmd(new_id .. "TermExec cmd='npm run " .. item.text .. "' size=10 direction=horizontal")
+      require("term-tabs").set_label(new_id, "npm run " .. item.text)
     end,
   }
 end, {})

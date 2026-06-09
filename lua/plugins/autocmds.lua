@@ -70,6 +70,30 @@ return {
         },
       },
 
+      term_tabbar = {
+        {
+          event = { "TermOpen", "TermClose" },
+          desc = "refresh the terminal tab bar in all visible winbars",
+          callback = function() vim.cmd "redrawstatus!" end,
+        },
+        {
+          event = "BufWinEnter",
+          desc = "keep non-terminal buffers out of the terminal split (redirect to editor)",
+          callback = function(args) require("term-tabs").keep_terminal(args.buf) end,
+        },
+        {
+          event = "FileType",
+          pattern = "toggleterm",
+          desc = "capture submitted command as the terminal tab label",
+          callback = function(args)
+            vim.keymap.set("t", "<CR>", function()
+              require("term-tabs").capture()
+              return vim.keycode "<CR>"
+            end, { buffer = args.buf, expr = true, desc = "Submit (update terminal tab label)" })
+          end,
+        },
+      },
+
       update_neovide_title = {
         {
           event = { "User", "DirChanged", "VimEnter" },

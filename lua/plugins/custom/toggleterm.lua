@@ -17,6 +17,8 @@ return {
     require("toggleterm").setup {
       -- Your general toggleterm settings here
       start_in_insert = true,
+      -- Always (re)enter terminals in terminal mode
+      persist_mode = false,
     }
 
     -- Define your TUI terminal persistently

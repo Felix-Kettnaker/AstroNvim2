@@ -214,6 +214,11 @@ return {
         ["<D-Esc>"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
         ["<D-v>"] = { '<C-\\><C-n>"+pi', desc = "Paste from clipboard" },
 
+        -- terminal tab bar (see lua/term-tabs.lua)
+        ["<C-Tab>"] = { function() require("term-tabs").switch(1) end, desc = "Next terminal tab" },
+        ["<C-S-Tab>"] = { function() require("term-tabs").switch(-1) end, desc = "Prev terminal tab" },
+        ["<D-w>"] = { function() require("term-tabs").close() end, desc = "Close terminal tab" },
+
         -- deletion in insert mode
         ["<D-Backspace>"] = shared["<D-Backspace>"],
         ["<D-Delete>"] = shared["<D-Delete>"],

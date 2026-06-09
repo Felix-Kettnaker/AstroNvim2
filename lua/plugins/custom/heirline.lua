@@ -58,6 +58,68 @@ return {
         }
       )
 
+      -- ===== toggleterm terminal tab bar (winbar) =====
+      -- Allow heirline's winbar on non-floating toggleterm windows (AstroNvim
+      -- disables it for buftype=terminal); floats stay bare.
+      local astro_disable_winbar = opts.opts.disable_winbar_cb
+      opts.opts.disable_winbar_cb = function(args)
+        if vim.bo[args.buf].filetype == "toggleterm" then
+          return vim.api.nvim_win_get_config(0).relative ~= ""
+        end
+        return astro_disable_winbar(args)
+      end
+
+      -- One tab per terminal, styled like the buffer tabline. We build children
+      -- ourselves instead of heirline's make_buflist: that helper is meant for
+      -- the single global tabline and decides the active tab from
+      -- vim.g.actual_curbuf (only set during statusline/tabline eval, not
+      -- winbar), so in a per-window winbar it dropped/blanked tabs. Here the
+      -- drawn window's current buffer is the source of truth for "active".
+      local status_utils = require "astroui.status.utils"
+      local term_tabs = require "term-tabs"
+
+      -- a single terminal's tab, styled active/inactive like a buffer tab
+      local function make_tab(bufnr, active)
+        local key = active and "buffer_active" or "buffer"
+        return status_utils.surround(
+          "tab",
+          { main = key .. "_bg", left = "tabline_bg", right = "tabline_bg" },
+          {
+            on_click = {
+              callback = function(_, minwid) require("term-tabs").click(minwid) end,
+              minwid = bufnr,
+              name = "heirline_term_tab_click",
+            },
+            provider = function()
+              local term = require("toggleterm.terminal").get(vim.b[bufnr].toggle_number, true)
+              return term and term_tabs.label(term) or ""
+            end,
+            hl = status.hl.get_attributes(key, true),
+          },
+          function() return vim.api.nvim_buf_is_valid(bufnr) end
+        )
+      end
+
+      table.insert(opts.winbar, 1, {
+        condition = function() return vim.bo.filetype == "toggleterm" end,
+        { -- the tab list: rebuild children each draw from the live terminal set
+          init = function(self)
+            local cur = vim.api.nvim_get_current_buf()
+            local bufs = term_tabs.bufs()
+            for i, bufnr in ipairs(bufs) do
+              if not (self[i] and self[i].bufnr == bufnr and self[i].active == (bufnr == cur)) then
+                self[i] = self:new(make_tab(bufnr, bufnr == cur), i)
+                self[i].bufnr, self[i].active = bufnr, bufnr == cur
+              end
+            end
+            for i = #bufs + 1, #self do
+              self[i] = nil
+            end
+          end,
+        },
+        status.component.fill { hl = { bg = "tabline_bg" } },
+      })
+
       return opts
     end,
   },
