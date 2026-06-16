@@ -100,7 +100,7 @@ local spec = {
         ["<Leader>cs"] = { function() vim.cmd 'SplitLineAt " "' end, desc = "Split current line at Spaces" },
         ["<Leader>cS"] = { function() vim.cmd "SplitLineAt" end, desc = "Split current line at provided delimiter" },
         ["<Leader>yl"] = { function() vim.cmd "YankLocation" end, desc = "Yanks the line and its location" },
-        ["<D-R>"] = { function() vim.cmd "FindAndReplace" end, desc = "Find and replace globally"}, 
+        ["<D-R>"] = { function() vim.cmd "FindAndReplace" end, desc = "Find and replace globally"},
 
         --- Plugin mappings ---
         -- picker
@@ -108,6 +108,8 @@ local spec = {
         ["<D-F>"] = { desc = "Find in files", function() require("snacks").picker.grep() end },
         ["<D-p>"] = { desc = "Find file", function() require("snacks").picker.files() end },
         ["<Leader>fj"] = { desc = "Find Jumps", function() require("snacks").picker.jumps() end },
+        ["<Leader>fd"] = { desc = "Find Diagnostics", function() require("snacks").picker.diagnostics_buffer() end },
+        ["<Leader>fD"] = { desc = "Find Diagnostics", function() require("snacks").picker.diagnostics() end },
         ["<Leader>fS"] = { desc = "Find NPM Scripts", function() vim.cmd "PickNpmScript" end },
         ["<Leader>ft"] = { desc = "Find Terminals", function() vim.cmd "PickTerminal" end },
 
