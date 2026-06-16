@@ -49,7 +49,7 @@ local shared = {
 
 ---@diagnostic disable: undefined-global
 ---@type LazySpec
-return {
+local spec = {
   "AstroNvim/astrocore",
   ---@type AstroCoreOpts
   opts = {
@@ -244,3 +244,16 @@ return {
     },
   },
 }
+
+-- Disable horizontal mouse scroll
+local hscroll = {
+  "<ScrollWheelLeft>", "<ScrollWheelRight>",
+  "<S-ScrollWheelLeft>", "<S-ScrollWheelRight>",
+}
+for _, mode in ipairs { "n", "i", "v", "t", "c" } do
+  for _, key in ipairs(hscroll) do
+    spec.opts.mappings[mode][key] = { "<Nop>", desc = "disabled horizontal scroll" }
+  end
+end
+
+return spec
